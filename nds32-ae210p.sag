@@ -1,0 +1,138 @@
+USER_SECTIONS .vector
+USER_SECTIONS .stub_section
+USER_SECTIONS .int_stack_op
+USER_SECTIONS .driver.isr
+USER_SECTIONS .dcdriver.isr
+USER_SECTIONS .tcm_section
+USER_SECTIONS .ilm_section
+USER_SECTIONS .ilm_rtos_section
+USER_SECTIONS .startup_section
+
+EILM 0x000000 0x00900000; address base 0x00000000, max_size=8MB
+{
+	EXEC_CODE 0x000000
+	{
+		*flash_boot.o KEEP(+RO LMA_FORCE_ALIGN) 
+		*flash_boot_ota.o KEEP(+RO LMA_FORCE_ALIGN) 
+		LOADADDR NEXT __sdk_code2_start
+		*dual_core.o KEEP(+RO LMA_FORCE_ALIGN)
+		*dual_core_ota.o KEEP(+RO LMA_FORCE_ALIGN)
+		LOADADDR NEXT __sdk_code_start
+		* KEEP(.vector LMA_FORCE_ALIGN)	
+		* KEEP(.stub_section LMA_FORCE_ALIGN)
+		*spi_flash.o KEEP(+RO LMA_FORCE_ALIGN)
+		* KEEP(.int_stack_op LMA_FORCE_ALIGN)
+		* KEEP(.driver.isr LMA_FORCE_ALIGN)
+		* KEEP(.driver.isr.* LMA_FORCE_ALIGN)
+		* KEEP(.tcm_section LMA_FORCE_ALIGN)
+		* KEEP(.tcm_section.* LMA_FORCE_ALIGN)
+;		* KEEP(.dcdriver.isr LMA_FORCE_ALIGN)
+		;* (+ISR LMA_FORCE_ALIGN,+RO LMA_FORCE_ALIGN)
+	}
+	ILM_Sec +0 ALIGN 0x8000
+	{
+		ADDR NEXT __ilm_lmastart
+		*mdct.c.o KEEP(+RO LMA_FORCE_ALIGN)
+		*lc3.c.o KEEP(+RO LMA_FORCE_ALIGN)
+		* KEEP (.startup_section LMA_FORCE_ALIGN)		
+		* KEEP(.ilm_section LMA_FORCE_ALIGN)
+		* KEEP(.ilm_section.* LMA_FORCE_ALIGN)
+		*lib_a-memcpy.o KEEP (+RO LMA_FORCE_ALIGN)
+		*lib_a-memset.o KEEP (+RO LMA_FORCE_ALIGN)
+		*lib_a-memcmp.o KEEP (+RO LMA_FORCE_ALIGN)
+		*lib_a-memmove.o KEEP (+RO LMA_FORCE_ALIGN)
+		* KEEP(.ilm_rtos_section LMA_FORCE_ALIGN)
+		* KEEP(.dcdriver.isr LMA_FORCE_ALIGN)
+;		*audio_core_adapt.o KEEP(+RO LMA_FORCE_ALIGN)
+		* (+ISR LMA_FORCE_ALIGN,+RO LMA_FORCE_ALIGN)
+	}
+
+	EXEC_SDRAM 0x2000E000 
+	{
+		VAR _SDA_BASE_= 0x20040000
+		LOADADDR NEXT __data_lmastart
+		ADDR     NEXT __data_start
+		STACK = 0x2000E000 
+		* (+RW LMA_FORCE_ALIGN,+ZI LMA_FORCE_ALIGN)
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

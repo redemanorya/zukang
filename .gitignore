@@ -1,0 +1,21 @@
+# Andes/AndeSight build outputs
+/Release/
+/output/
+
+# Source Insight local database
+/SI4/
+
+# Local diagnostics and captured logs
+/err_logs/
+/log.txt
+
+# Bundled Windows utilities are kept locally but not versioned
+/tools/**/*.exe
+
+# Editor and OS-local files
+*.suo
+*.user
+*.tmp
+*.bak
+Thumbs.db
+.DS_Store

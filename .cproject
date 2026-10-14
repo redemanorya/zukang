@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="config.nds32le-elf-mculib-v3s.exe.debug.1519929465">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="config.nds32le-elf-mculib-v3s.exe.debug.1519929465" moduleId="org.eclipse.cdt.core.settings" name="Release">
+				<externalSettings/>
+				<extensions>
+					<extension id="com.andestech.ide.cdt.managedbuilder.core.CROSS_GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="adx" artifactName="${ProjName}" buildArtefactType="nds.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=nds.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" description="" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser" id="config.nds32le-elf-mculib-v3s.exe.debug.1519929465" name="Release" parent="config.nds32le-elf-mculib-v3s.exe.debug" postannouncebuildStep="" postbuildStep="$(CROSS_COMPILE)objcopy -O binary &quot;${ProjName}.adx&quot; output/B6_Audio_SDK.bin ;$(CROSS_COMPILE)objcopy -O binary app_src/components/flash_manage/flash_param.o ../tools/merge_script/flash_param.bin ; ../tools/script_post.bat ; " preannouncebuildStep="" prebuildStep="../tools/script.bat">
+					<folderInfo id="config.nds32le-elf-mculib-v3s.exe.debug.1519929465." name="/" resourcePath="">
+						<toolChain errorParsers="" id="nds.nds32le-elf-mculib-v3s.exe.debug.199898441" name="nds32le-elf-mculib-v3s" superClass="nds.nds32le-elf-mculib-v3s.exe.debug">
+							<option id="nds32le-elf-mculib-v3s.managedbuild.option.toolchain.RSE_CONNECT.1712627211" name="RSE_CONNECT" superClass="nds32le-elf-mculib-v3s.managedbuild.option.toolchain.RSE_CONNECT" value="ICE" valueType="string"/>
+							<targetPlatform binaryParser="com.andestech.ide.cdt.managedbuilder.core.CROSS_GNU_ELF" id="target.nds32le-elf-mculib-v3s.platform.exe.debug.1713865771" name="Debug Platform" superClass="target.nds32le-elf-mculib-v3s.platform.exe.debug"/>
+							<builder buildPath="${workspace_loc:/${ProjName}/Debug}" errorParsers="org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.CWDLocator" id="target.nds32le-elf-mculib-v3s.builder.exe.debug.1006338627" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Andes Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="target.nds32le-elf-mculib-v3s.builder.exe.debug"/>
+							<tool id="tool.nds32le-elf-mculib-v3s.archiver.base.1306959264" name="Andes Archiver" superClass="tool.nds32le-elf-mculib-v3s.archiver.base"/>
+							<tool id="tool.nds32le-elf-mculib-v3s.cpp.compiler.exe.debug.452434044" name="Andes C++ Compiler" superClass="tool.nds32le-elf-mculib-v3s.cpp.compiler.exe.debug">
+								<option id="nds32le-elf-mculib-v3s.cpp.compiler.exe.debug.option.debugging.level.780682864" name="Debug Level" superClass="nds32le-elf-mculib-v3s.cpp.compiler.exe.debug.option.debugging.level" value="nds.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+							</tool>
+							<tool id="tool.nds32le-elf-mculib-v3s.cpp.linker.exe.debug.1026061302" name="Andes C++ Linker" superClass="tool.nds32le-elf-mculib-v3s.cpp.linker.exe.debug">
+								<option defaultValue="-O0" id="nds.cpp.link.option.optimization.level.992797739" name="Optimization Level" superClass="nds.cpp.link.option.optimization.level" valueType="string"/>
+								<option defaultValue="true" id="nds32le-elf-mculib-v3s.cpp.link.option.noshared.base.835270065" name="No shared libraries (-static)" superClass="nds32le-elf-mculib-v3s.cpp.link.option.noshared.base" valueType="boolean"/>
+							</tool>
+							<tool command="$(CROSS_COMPILE)gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="tool.nds32le-elf-mculib-v3s.c.compiler.exe.debug.2120626048" name="Andes C Compiler" superClass="tool.nds32le-elf-mculib-v3s.c.compiler.exe.debug">
+								<option id="nds32le-elf-mculib-v3s.c.compiler.exe.debug.option.debugging.level.915433795" name="Debug Level" superClass="nds32le-elf-mculib-v3s.c.compiler.exe.debug.option.debugging.level" value="nds.c.debugging.level.max" valueType="enumerated"/>
+								<option id="nds.c.compiler.option.include.paths.484335983" name="Include paths (-I)" superClass="nds.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_framework/mode_engine}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_framework/audio_engine}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_framework/bluetooth_engine}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_framework/wireless2_engine}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_framework/wireless2_engine/lib/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/mv_upgrade}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/mv_app}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/hmi/rgb_pwm}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/hmi/display}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/tuya_sdk/extern_components/mbedtls}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/tuya_sdk/sdk/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/tuya_sdk/sdk}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/tuya_sdk}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/tuya_sdk/port}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/tuya_sdk/sdk/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/tuya_app}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/tuya_sdk/app/uart_common}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/tuya_sdk/app/product_test}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/audio_common}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/audio_common/bridge}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/leaudio}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/power}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/app_mode_radio}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/leaudio/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/app_mode_leaudio_sink}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/app_mode_media}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/system_config}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/app_mode_idle}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/app_mode_linein}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/app_mode_bt}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/app_mode_usb_audio}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/app_mode_i2s}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/app_mode_spdif}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/app_mode_hdmi}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/app_mode_safe}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/app_mode}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/hmi/fm}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/hmi/detect}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/hmi/key}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/components/soft_watchdog}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/components/rtc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/components/ble}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/components/dualcore}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/components/upgrade}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/components/audio}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/components/bluetooth}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/components/flash_manage}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/components/otg/device/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/components/otg/host/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/components/headphone}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/components/audio/amp_driver}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/mv_utils/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/dual_core}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/flashboot}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/roboeffect/roboeffect_lib/wraps}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/roboeffect/roboeffect_lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/fatfs/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/otg_host/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/rtos/freertos/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/rtos/rtos_api}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/roboeffect/third_party_effect}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/audio/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/bluetooth/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/cec/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/lrc/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/rtc/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/driver/driver/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/driver/driver_api/inc}&quot;"/>
+								</option>
+								<option id="nds.c.compiler.option.optimization.lto.2031382172" name="Link Time Optimization (-flto)" superClass="nds.c.compiler.option.optimization.lto" value="false" valueType="boolean"/>
+								<option id="nds.c.compiler.option.optimization.removesections.function.353609724" name="Remove unused function sections (-ffunction-sections)" superClass="nds.c.compiler.option.optimization.removesections.function" value="true" valueType="boolean"/>
+								<option id="nds.c.compiler.option.optimization.removesections.data.1933372383" name="Remove unused data sections (-fdata-sections)" superClass="nds.c.compiler.option.optimization.removesections.data" value="true" valueType="boolean"/>
+								<option id="nds.c.compiler.option.preprocessor.def.symbols.1528756520" name="Defined symbols (-D)" superClass="nds.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="CFG_APP_CONFIG"/>
+									<listOptionValue builtIn="false" value="CUR_CORE1"/>
+									<listOptionValue builtIn="false" value="FUNC_OS_EN=1"/>
+								</option>
+								<option id="nds.c.compiler.option.misc.other.827050323" name="Other flags" superClass="nds.c.compiler.option.misc.other" value="-c -fmessage-length=0 -ldsp -mext-dsp -std=gnu99" valueType="string"/>
+								<option id="nds.c.compiler.option.optimization.flags.419826643" name="Other optimization flags" superClass="nds.c.compiler.option.optimization.flags" value="" valueType="string"/>
+								<option id="nds32le-elf-mculib-v3s.c.compiler.exe.debug.option.optimization.level.1949134917" name="Optimization Level" superClass="nds32le-elf-mculib-v3s.c.compiler.exe.debug.option.optimization.level" value="nds.c.optimization.level.debugger" valueType="enumerated"/>
+								<option id="nds.c.compiler.option.preprocessor.undef.symbol.1429195657" name="Undefined symbols (-U)" superClass="nds.c.compiler.option.preprocessor.undef.symbol"/>
+								<inputType id="tool.nds.c.compiler.input.1831185095" superClass="tool.nds.c.compiler.input"/>
+							</tool>
+							<tool command="$(CROSS_COMPILE)gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="tool.nds32le-elf-mculib-v3s.c.linker.exe.debug.1016137624" name="Andes C Linker" superClass="tool.nds32le-elf-mculib-v3s.c.linker.exe.debug">
+								<option defaultValue="-O0" id="nds.c.link.option.optimization.level.1358727734" name="Optimization Level" superClass="nds.c.link.option.optimization.level" value="-Og" valueType="string"/>
+								<option defaultValue="true" id="nds32le-elf-mculib-v3s.c.link.option.noshared.base.802531209" name="No shared libraries (-static)" superClass="nds32le-elf-mculib-v3s.c.link.option.noshared.base" valueType="boolean"/>
+								<option id="nds.c.linker.option.cmodel.1632701327" name="Code Model" superClass="nds.c.linker.option.cmodel" value="-mcmodel=medium" valueType="string"/>
+								<option defaultValue="" id="nds32le-elf-mculib-v3s.c.link.exe.debug.option.ldscript.1143673726" name="Linker Script (-T)" superClass="nds32le-elf-mculib-v3s.c.link.exe.debug.option.ldscript" value="../nds32-ae210p.ld" valueType="string"/>
+								<option id="nds.c.link.option.libs.294446076" name="Libraries (-l)" superClass="nds.c.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="Driver"/>
+									<listOptionValue builtIn="false" value="Lrc"/>
+									<listOptionValue builtIn="false" value="tuya_ble_sdk_v2.0.0_B6"/>
+									<listOptionValue builtIn="false" value="mp2enc"/>
+									<listOptionValue builtIn="false" value="mp3enc"/>
+									<listOptionValue builtIn="false" value="AudioDecoderLibrary"/>
+									<listOptionValue builtIn="false" value="fatfs"/>
+									<listOptionValue builtIn="false" value="Roboeffect"/>
+									<listOptionValue builtIn="false" value="AudioEffectLibrary"/>
+									<listOptionValue builtIn="false" value="VocalCut"/>
+									<listOptionValue builtIn="false" value="Beamforming"/>
+									<listOptionValue builtIn="false" value="cec"/>
+									<listOptionValue builtIn="false" value="uac"/>
+									<listOptionValue builtIn="false" value="resampler"/>
+									<listOptionValue builtIn="false" value="BtStack"/>
+									<listOptionValue builtIn="false" value="wireless2"/>
+									<listOptionValue builtIn="false" value="audio_association"/>
+									<listOptionValue builtIn="false" value="LC3mv"/>
+									<listOptionValue builtIn="false" value="LC3Enc"/>
+									<listOptionValue builtIn="false" value="cvsd_plc"/>
+									<listOptionValue builtIn="false" value="sbcenc"/>
+									<listOptionValue builtIn="false" value="plc128"/>
+									<listOptionValue builtIn="false" value="RTC"/>
+									<listOptionValue builtIn="false" value="dsp"/>
+									<listOptionValue builtIn="false" value="m"/>
+								</option>
+								<option id="nds.c.link.option.paths.120443891" name="Library search path (-L)" superClass="nds.c.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/driver/driver}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/lrc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_src/tuya_sdk/sdk/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/fatfs}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/roboeffect/roboeffect_lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/audio}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/bluetooth}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/cec}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/otg_host}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/middleware/rtc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/app_framework/wireless2_engine/lib}&quot;"/>
+								</option>
+								<option id="nds.c.link.option.nostart.286150215" name="Do not use standard start files (-nostartfiles)" superClass="nds.c.link.option.nostart" value="true" valueType="boolean"/>
+								<option id="nds.c.link.option.LTO.1665948024" name="Link Time Optimization (-flto)" superClass="nds.c.link.option.LTO" value="false" valueType="boolean"/>
+								<option id="nds.c.link.option.other.duplacitecompiler.1818067665" name="DuplaciteComplierOption" superClass="nds.c.link.option.other.duplacitecompiler" value="-g3 -mcpu=d1088-spu -ffunction-sections -fdata-sections -fmessage-length=0 " valueType="string"/>
+								<option id="nds.c.link.option.removesections.2005191374" name="Remove unused sections (-ffunction-sections or -fdata-sections)" superClass="nds.c.link.option.removesections" value="true" valueType="boolean"/>
+								<inputType id="tool.nds.c.linker.input.828095184" superClass="tool.nds.c.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool command="$(CROSS_COMPILE)as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="tool.nds32le-elf-mculib-v3s.assembler.exe.debug.1200989958" name="Andes Assembler" superClass="tool.nds32le-elf-mculib-v3s.assembler.exe.debug">
+								<option defaultValue="-g" id="nds.both.asm.option.flags.498415083" name="Assembler flags" superClass="nds.both.asm.option.flags" valueType="string"/>
+								<inputType id="tool.nds.assembler.input.95435001" superClass="tool.nds.assembler.input"/>
+							</tool>
+							<tool command="$(CROSS_COMPILE)nm" commandLinePattern="${COMMAND} ${FLAGS} &quot;${BuildArtifactFilePrefix}${BuildArtifactFileName}&quot; ${OUTPUT_FLAG} ${OUTPUT}" errorParsers="" id="tool.nds32le-elf-mculib-v3s.nm.exe.debug.448363505" name="NM (symbol listing)" superClass="tool.nds32le-elf-mculib-v3s.nm.exe.debug"/>
+							<tool command="$(CROSS_COMPILE)readelf" commandLinePattern="${COMMAND} ${FLAGS} &quot;${BuildArtifactFilePrefix}${BuildArtifactFileName}&quot; ${OUTPUT_FLAG} ${OUTPUT}" errorParsers="" id="tool.nds32le-elf-mculib-v3s.readelf.exe.debug.1880701617" name="Readelf (ELF info listing)" superClass="tool.nds32le-elf-mculib-v3s.readelf.exe.debug"/>
+							<tool command="$(CROSS_COMPILE)objdump" commandLinePattern="${COMMAND} ${FLAGS} &quot;${BuildArtifactFilePrefix}${BuildArtifactFileName}&quot; ${OUTPUT_FLAG} ${OUTPUT}" errorParsers="" id="tool.nds32le-elf-mculib-v3s.objdump.exe.debug.2123758658" name="Objdump (disassembly)" superClass="tool.nds32le-elf-mculib-v3s.objdump.exe.debug">
+								<option id="nds.objdump.option.disable.662993445" name="Disable. (Do not auto-generate output file.)" superClass="nds.objdump.option.disable" value="false" valueType="boolean"/>
+							</tool>
+							<tool command="$(CROSS_COMPILE)objcopy" commandLinePattern="${COMMAND} ${FLAGS} &quot;${BuildArtifactFilePrefix}${BuildArtifactFileName}&quot; ${OUTPUT}" errorParsers="" id="tool.nds32le-elf-mculib-v3s.objcopy.exe.debug.1243140527" name="Objcopy (object content copy)" superClass="tool.nds32le-elf-mculib-v3s.objcopy.exe.debug">
+								<option id="nds.objcopy.option.disable.1087960376" name="Disable. (Do not auto-generate output file.)" superClass="nds.objcopy.option.disable" value="false" valueType="boolean"/>
+							</tool>
+							<tool command="$(CROSS_COMPILE)size" commandLinePattern="${COMMAND} ${FLAGS} &quot;${BuildArtifactFilePrefix}${BuildArtifactFileName}&quot; ${OUTPUT_FLAG} ${OUTPUT}" errorParsers="" id="tool.nds32le-elf-mculib-v3s.size.exe.debug.305358255" name="Size (section size listing)" superClass="tool.nds32le-elf-mculib-v3s.size.exe.debug"/>
+							<tool command="nds_ldsag" commandLinePattern="${COMMAND} ${FLAGS} &quot;$(SAG_FILE)&quot; ${OUTPUT_FLAG} $(LDSAG_OUT)" errorParsers="" id="tool.nds32le-elf-mculib-v3s.ldsag.exe.debug.1814874198" name="LdSaG Tool" superClass="tool.nds32le-elf-mculib-v3s.ldsag.exe.debug"/>
+						</toolChain>
+					</folderInfo>
+					<fileInfo id="config.nds32le-elf-mculib-v3s.exe.debug.1519929465.2009964198" name="otg_host_audio.h" rcbsApplicability="disable" resourcePath="otg/host/inc/otg_host_audio.h" toolsToInvoke="">
+						<tool customBuildStep="true" id="org.eclipse.cdt.managedbuilder.ui.rcbs.807044669" name="Resource Custom Build Step">
+							<inputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.inputtype.864235181" name="Resource Custom Build Step Input Type">
+								<additionalInput kind="additionalinputdependency" paths=""/>
+							</inputType>
+							<outputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.outputtype.1012532312" name="Resource Custom Build Step Output Type"/>
+						</tool>
+					</fileInfo>
+					<fileInfo id="config.nds32le-elf-mculib-v3s.exe.debug.1519929465.710856744" name="ble_app_gatt_tuya.h" rcbsApplicability="disable" resourcePath="app_src/components/ble/ble_app_gatt_tuya.h" toolsToInvoke=""/>
+					<folderInfo id="config.nds32le-elf-mculib-v3s.exe.debug.1519929465.1563904510" name="/" resourcePath="app_src/tuya_sdk">
+						<toolChain errorParsers="" id="nds.nds32le-elf-mculib-v3s.exe.debug.348219313" name="nds32le-elf-mculib-v3s" superClass="nds.nds32le-elf-mculib-v3s.exe.debug" unusedChildren="">
+							<option id="nds32le-elf-mculib-v3s.managedbuild.option.toolchain.RSE_CONNECT.1712627211.670291372" name="RSE_CONNECT" superClass="nds32le-elf-mculib-v3s.managedbuild.option.toolchain.RSE_CONNECT.1712627211"/>
+							<targetPlatform id="target.nds32le-elf-mculib-v3s.platform.exe.debug" name="Debug Platform" superClass="target.nds32le-elf-mculib-v3s.platform.exe.debug"/>
+							<tool id="tool.nds32le-elf-mculib-v3s.archiver.base.1054702120" name="Andes Archiver" superClass="tool.nds32le-elf-mculib-v3s.archiver.base.1306959264"/>
+							<tool id="tool.nds32le-elf-mculib-v3s.cpp.compiler.exe.debug.703947411" name="Andes C++ Compiler" superClass="tool.nds32le-elf-mculib-v3s.cpp.compiler.exe.debug.452434044"/>
+							<tool id="tool.nds32le-elf-mculib-v3s.cpp.linker.exe.debug.963034743" name="Andes C++ Linker" superClass="tool.nds32le-elf-mculib-v3s.cpp.linker.exe.debug.1026061302"/>
+							<tool errorParsers="org.eclipse.cdt.core.GCCErrorParser" id="tool.nds32le-elf-mculib-v3s.c.compiler.exe.debug.1213386281" name="Andes C Compiler" superClass="tool.nds32le-elf-mculib-v3s.c.compiler.exe.debug.2120626048">
+								<inputType id="tool.nds.c.compiler.input.1966810582" superClass="tool.nds.c.compiler.input"/>
+							</tool>
+							<tool id="tool.nds32le-elf-mculib-v3s.c.linker.exe.debug.241843750" name="Andes C Linker" superClass="tool.nds32le-elf-mculib-v3s.c.linker.exe.debug.1016137624"/>
+							<tool errorParsers="org.eclipse.cdt.core.GASErrorParser" id="tool.nds32le-elf-mculib-v3s.assembler.exe.debug.1517962931" name="Andes Assembler" superClass="tool.nds32le-elf-mculib-v3s.assembler.exe.debug.1200989958">
+								<inputType id="tool.nds.assembler.input.1155527866" superClass="tool.nds.assembler.input"/>
+							</tool>
+							<tool errorParsers="" id="tool.nds32le-elf-mculib-v3s.nm.exe.debug.2026584944" name="NM (symbol listing)" superClass="tool.nds32le-elf-mculib-v3s.nm.exe.debug.448363505"/>
+							<tool errorParsers="" id="tool.nds32le-elf-mculib-v3s.readelf.exe.debug.468281342" name="Readelf (ELF info listing)" superClass="tool.nds32le-elf-mculib-v3s.readelf.exe.debug.1880701617"/>
+							<tool errorParsers="" id="tool.nds32le-elf-mculib-v3s.objdump.exe.debug.1492065329" name="Objdump (disassembly)" superClass="tool.nds32le-elf-mculib-v3s.objdump.exe.debug.2123758658"/>
+							<tool errorParsers="" id="tool.nds32le-elf-mculib-v3s.objcopy.exe.debug.994694258" name="Objcopy (object content copy)" superClass="tool.nds32le-elf-mculib-v3s.objcopy.exe.debug.1243140527"/>
+							<tool errorParsers="" id="tool.nds32le-elf-mculib-v3s.size.exe.debug.842614632" name="Size (section size listing)" superClass="tool.nds32le-elf-mculib-v3s.size.exe.debug.305358255"/>
+							<tool errorParsers="" id="tool.nds32le-elf-mculib-v3s.ldsag.exe.debug.1755841535" name="LdSaG Tool" superClass="tool.nds32le-elf-mculib-v3s.ldsag.exe.debug.1814874198"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="new_amp_parameter|SI4|DriverAPI/src/spis_interface.c|DriverAPI/src/otg/device/otg_device_audio.c|src/uarts_interface.c|app_src/components/ble/ble_app_gatt_tuya.h|otg/host/inc/otg_host_audio.h|driver/driver_api/src/otg|app_src/tuya_app|DriverAPI/src/i2c_interface.c|DriverAPI/src/spim_interface.c|app_src/tuya_sdk|otg/host/src/otg_host_audio.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="Example_ADC.target.nds32le-elf-mculib-v3s.exe.316802969" name="Andes Executable" projectType="target.nds32le-elf-mculib-v3s.exe"/>
+	</storageModule>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/B6_Audio_SDK"/>
+		</configuration>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/B6_Audio_SDK"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="config.nds32le-elf-mculib-v3s.exe.debug.1519929465;config.nds32le-elf-mculib-v3s.exe.debug.1519929465.;tool.nds32le-elf-mculib-v3s.c.compiler.exe.debug.2120626048;tool.nds.c.compiler.input.1831185095">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.andestech.ide.cdt.managedbuilder.core.ndsManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="config.nds32le-elf-mculib-v3s.exe.release.1922083503;config.nds32le-elf-mculib-v3s.exe.release.1922083503.;tool.nds32le-elf-mculib-v3s.c.compiler.exe.release.1480700085;tool.nds.c.compiler.input.250630512">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.andestech.ide.cdt.managedbuilder.core.ndsManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+</cproject>

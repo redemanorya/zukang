@@ -1,0 +1,115 @@
+0x07, /*length*/
+0x00, /*enable*/
+0x00, 0x00,	//mute
+0x00, 0x00,	//gain
+0x00, 0x00,	//filter0
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "roboeffect_api.h"
+/**
+ * simple_gain interface codes
+*/
+bool roboeffect_simple_gain_init_if(void *node)
+{
+	uint8_t *context_ptr;
+	roboeffect_user_defined_effect_info info;
+	void *context_ptr;
+
+	/**
+	 * get information struct from instance
+	*/
+	roboeffect_user_defined_get_info(node, &info);
+
+	/**
+	 * get user defined struct context
+	*/
+	context_ptr = info.context_memory;
+
+	/**
+	 * Can get info.scratch_memory if used;
+	*/
+
+	/*
+	* Todo: Init user defined algorithm.
+	*/
+
+
+	return TRUE;
+}
+
+bool roboeffect_simple_gain_config_if(void *node, int16_t *new_param, uint8_t param_num, uint8_t len)
+{
+	int ret;
+	uint8_t method_flag = 0;
+	roboeffect_user_defined_effect_info info;
+	void *context_ptr;
+
+	/**
+	 * check parameters and update to effect instance
+	*/
+	if(ROBOEFFECT_ERROR_OK > roboeffect_user_defined_params_check(node, new_param, param_num, len, &method_flag))
+	{
+		return FALSE;
+	}
+
+	/**
+	 * get information struct from instance
+	*/
+	roboeffect_user_defined_get_info(node, &info);
+
+	/**
+	 * get user defined struct context
+	*/
+	context_ptr = info.context_memory;
+
+	if((method_flag & METHOD_CFG_1) && info.is_active)
+	{
+		//call config APIs if this parameter use METHOD_CFG_1 flag.
+	}
+
+	return TRUE;
+}
+
+bool roboeffect_simple_gain_apply_if(void *node, int16_t *pcm_in1, int16_t *pcm_in2, int16_t *pcm_out, int32_t n)
+{
+	int i, s;
+	int32_t pregain, *pcm_in_24 = (int32_t*)pcm_in1, *pcm_out_24 = (int32_t*)pcm_out;
+	roboeffect_user_defined_effect_info info;
+	void *context_ptr;
+
+	/**
+	 * get information struct from instance
+	*/
+	roboeffect_user_defined_get_info(node, &info);
+
+	/**
+	 * get user defined struct context
+	*/
+	context_ptr = info.context_memory;
+	
+	/*
+	* Todo: Apply user defined algorithm.
+	*/
+	
+
+	return TRUE;
+}
+
+bool roboeffect_simple_gain_memory_size_if(roboeffect_memory_size_query *query, roboeffect_memory_size_response *response)
+{
+	//return real size of context memory
+	response->context_memory_size = 4;
+
+	//return additional memory size
+	response->additional_memory_size = 0;
+
+	//return scratch memory size
+	response->scratch_memory_size = 0;
+
+	return TRUE;
+}
+
