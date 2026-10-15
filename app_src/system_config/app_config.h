@@ -93,8 +93,7 @@
 #define CFG_RL_SPEAKER_VOLUME_DEFAULT           66U
 #define CFG_RL_HEADPHONE_VOLUME_DEFAULT         72U
 #define CFG_FUNC_HEADPHONE_EN                        /* Headphone out (DAC0) + impedance detect ¶ú»úÊä³öºÍ×è¿¹Æ¥Åä¿ªÆô*/
-//#define CFG_HP_DAC0_BOOT_MUTE_TEST              /* Temporary diagnostic: keep DAC0 muted during boot */
-#define CFG_HP_AD_REF_TOGGLE_BYPASS_TEST          /* Temporary diagnostic: keep PB8 AD reference low */
+#define CFG_HP_IMPEDANCE_PWM_SYNC_EN                 /* PB8 20kHz PWM synchronous impedance measurement */
 /* PB8=AD_EN, PB9=HP_DETC, PA30/31=AD0/AD1 (see gpio_config.h) */
 /**Source**/
 #define CFG_FUNC_MIC_EN

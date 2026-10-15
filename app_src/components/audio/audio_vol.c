@@ -195,11 +195,7 @@ void HardWareMuteOrUnMute(void)
 #ifdef CFG_RES_DAC_MONITOR_EN
 	if(AudioCoreSinkIsEnable(AUDIO_DAC_SINK_NUM))
 	{
-#ifdef CFG_HP_DAC0_BOOT_MUTE_TEST
-		AudioDAC_SoftMute(DAC_SEL, TRUE, TRUE);
-#else
 		AudioDAC_SoftMute(DAC_SEL, mainAppCt.gSysVol.MuteFlag, mainAppCt.gSysVol.MuteFlag);
-#endif
 	}
 #endif
 #if (CFG_RES_MIC_SELECT) && defined(CFG_FUNC_MIC_EN)

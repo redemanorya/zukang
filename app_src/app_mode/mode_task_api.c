@@ -926,9 +926,7 @@ bool ModeCommonInit(void)
 #endif//BT_LE_AUDIO_SUPPORT && (LE_AUDIO_ROLE == CIS_SRC)
 
 #ifdef CFG_RES_DAC_MONITOR_EN
-#ifndef CFG_HP_DAC0_BOOT_MUTE_TEST
 	AudioDAC_SoftMute(DAC_SEL, 0, 0);
-#endif
 	AudioDAC_Enable(DAC_SEL);
 #endif
 #ifdef CFG_COMMUNICATION_BY_UART
@@ -1422,9 +1420,7 @@ bool AudioIoCommonForHfp(uint16_t gain)
 #endif
 
 #ifdef CFG_RES_DAC_MONITOR_EN
-#ifndef CFG_HP_DAC0_BOOT_MUTE_TEST
 	AudioDAC_SoftMute(DAC_SEL, 0, 0);
-#endif
 	AudioDAC_Enable(DAC_SEL);
 #endif
 #ifdef CFG_COMMUNICATION_BY_UART

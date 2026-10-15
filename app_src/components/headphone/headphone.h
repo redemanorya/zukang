@@ -43,10 +43,10 @@ typedef enum
 /* Right/left sampling result */
 typedef struct
 {
-    uint16_t right_adc;        /* raw ADC value, right (PA30/AD0) */
-    uint16_t left_adc;         /* raw ADC value, left  (PA31/AD1) */
-    int16_t  right_mv;         /* converted voltage in mV */
-    int16_t  left_mv;          /* converted voltage in mV */
+    uint16_t right_adc;        /* ADC code: raw DC or PWM high-low delta */
+    uint16_t left_adc;         /* ADC code: raw DC or PWM high-low delta */
+    int16_t  right_mv;         /* raw/delta voltage in mV */
+    int16_t  left_mv;          /* raw/delta voltage in mV */
     HP_IMPEDANCE_E right_imp;  /* judged impedance, right */
     HP_IMPEDANCE_E left_imp;   /* judged impedance, left  */
 } HP_IMPEDANCE_INFO;

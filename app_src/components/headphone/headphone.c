@@ -28,8 +28,13 @@
 #include "sadc_interface.h"
 #include "dac.h"
 #include "dac_interface.h"
+#include "pwm.h"
+#include "timer.h"
+#include "clk.h"
+#include "irqn.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "rtos_api.h"
 
 #include "app_config.h"
 #include "headphone.h"
@@ -61,16 +66,49 @@
 #define HP_ADC_REF_MV       3300
 
 /* normalized sampling: 8 samples, drop max/min, average the rest */
+#ifndef CFG_HP_IMPEDANCE_PWM_SYNC_EN
 #define HP_SAMPLE_NUM       8
 #define HP_SAMPLE_INTERVAL_MS 20     /* delay between samples */
+#endif
 
 /* slow-plug settle: wait for mechanical contacts to stabilize before
  * sampling; also used as retry delay on abnormal L/R asymmetry. */
 #define HP_SETTLE_MS        1000
 /* reference voltage settle after AD_EN(PB8) raised, before first sample */
+#ifndef CFG_HP_IMPEDANCE_PWM_SYNC_EN
 #define HP_REF_SETTLE_MS    100
+#endif
 /* if |L-R| > this, suspect one pin not fully mated -> resample once */
 #define HP_IMP_ASYM_MV      300
+
+#ifdef CFG_HP_IMPEDANCE_PWM_SYNC_EN
+/* Timer7 PWM2 is routed to PB8. PWM0/PWM3 compare points are used only
+ * as ADC sampling timestamps; their GPIO outputs are not routed. */
+#define HP_PWM_TIMER                 TIMER7
+#define HP_PWM_IRQ                   TMR7_IRQn
+#define HP_PWM_GPIO_SEL              TIMER7_PWM2_A16_B8
+#define HP_PWM_GPIO_INDEX            1U
+#define HP_PWM_GPIO_CHANNEL          PWM_CHANNEL2
+#define HP_PWM_FREQ_HZ               20000U
+#define HP_PWM_DUTY_PERCENT          50U
+#define HP_PWM_HIGH_SAMPLE_PERCENT   40U
+#define HP_PWM_LOW_SAMPLE_PERCENT    90U
+#define HP_PWM_TOTAL_CYCLES          1U
+#define HP_PWM_SAMPLE_CHANNELS       2U
+#define HP_PWM_ADC_POLL_LIMIT        4096U
+#define HP_PWM_TASK_TIMEOUT_MS       5U
+
+typedef struct
+{
+    volatile uint8_t cycle;
+    volatile bool done;
+    volatile bool adc_error;
+    volatile uint16_t high_adc[HP_PWM_SAMPLE_CHANNELS];
+    volatile uint16_t low_adc[HP_PWM_SAMPLE_CHANNELS];
+} HP_PWM_SAMPLE_STATE;
+
+static HP_PWM_SAMPLE_STATE s_hpPwmSample;
+#endif
 
 /* ---------------- state ---------------- */
 static HP_STATE_E  s_hpState = HP_STATE_NO;
@@ -151,11 +189,6 @@ static bool HpDetRead(void)
 //使能/失能耳放芯片
 static void HpAdEnSet(bool on)
 {
-#ifdef CFG_HP_AD_REF_TOGGLE_BYPASS_TEST
-    (void)on;
-    GPIO_RegOneBitClear(GPIO_B_OUT, AD_EN_PIN);
-    return;
-#endif
     if (on)
     {
         GPIO_RegOneBitSet(GPIO_B_OUT, AD_EN_PIN);
@@ -178,6 +211,7 @@ static void AdcChSampleDeinit(GPIO_INDEX port)
     GPIO_RegOneBitClear(GPIO_A_ANA_EN, port);
 }
 //单次采样
+#ifndef CFG_HP_IMPEDANCE_PWM_SYNC_EN
 static uint16_t HpAdcSampleOnce(ADC_DC_CHANNEL_SEL ch, GPIO_INDEX port)
 {
     uint16_t val = 0;
@@ -228,6 +262,236 @@ static uint16_t HpAdcSampleNormalized(ADC_DC_CHANNEL_SEL ch, GPIO_INDEX port)
 #endif
     return (uint16_t)sum;
 }
+#endif
+
+#ifdef CFG_HP_IMPEDANCE_PWM_SYNC_EN
+static void HpPwmGpioRestoreLow(void)
+{
+    PWM_GpioConfig(HP_PWM_GPIO_SEL, HP_PWM_GPIO_INDEX,
+                   PWM_IO_MODE_NONE, HP_PWM_GPIO_CHANNEL);
+    GPIO_PortBModeSet(AD_EN_PIN, 0);
+    GPIO_RegOneBitClear(GPIO_B_IE, AD_EN_PIN);
+    GPIO_RegOneBitSet(GPIO_B_OE, AD_EN_PIN);
+    GPIO_RegOneBitClear(GPIO_B_OUT, AD_EN_PIN);
+}
+
+static void HpPwmIrqStop(void)
+{
+    PWM_Disable(HP_PWM_TIMER);
+    Timer_InterrputSrcDisable(HP_PWM_TIMER, PWM1_COMP1_INTERRUPT_SRC);
+    Timer_InterrputSrcDisable(HP_PWM_TIMER, PWM1_COMP4_INTERRUPT_SRC);
+    s_hpPwmSample.done = true;
+}
+
+static bool HpPwmAdcRead(ADC_DC_CHANNEL_SEL ch, volatile uint16_t *value)
+{
+    uint32_t guard = HP_PWM_ADC_POLL_LIMIT;
+
+    ADC_SingleModeDataStart((uint32_t)ch);
+    while (!ADC_SingleModeDataConvertionState())
+    {
+        if (--guard == 0U)
+        {
+            return false;
+        }
+    }
+    *value = (uint16_t)ADC_SingleModeDataOut() & 0x0FFFU;
+    return true;
+}
+
+void Timer7_Interrupt(void)
+{
+    /* One PWM period: sample both channels at the high and low phases. */
+    if (Timer_InterruptFlagGet(HP_PWM_TIMER, PWM1_COMP1_INTERRUPT_SRC) > 0)
+    {
+        Timer_InterruptFlagClear(HP_PWM_TIMER, PWM1_COMP1_INTERRUPT_SRC);
+        if (s_hpPwmSample.cycle < HP_PWM_TOTAL_CYCLES)
+        {
+            if (!HpPwmAdcRead(HP_ADC_RT_CH, &s_hpPwmSample.high_adc[0]))
+            {
+                s_hpPwmSample.adc_error = true;
+            }
+            if (!s_hpPwmSample.adc_error &&
+                !HpPwmAdcRead(HP_ADC_LT_CH, &s_hpPwmSample.high_adc[1]))
+            {
+                s_hpPwmSample.adc_error = true;
+            }
+        }
+    }
+
+    if (s_hpPwmSample.adc_error)
+    {
+        if (Timer_InterruptFlagGet(HP_PWM_TIMER, PWM1_COMP4_INTERRUPT_SRC) > 0)
+        {
+            Timer_InterruptFlagClear(HP_PWM_TIMER, PWM1_COMP4_INTERRUPT_SRC);
+        }
+        HpPwmIrqStop();
+        return;
+    }
+
+    if (Timer_InterruptFlagGet(HP_PWM_TIMER, PWM1_COMP4_INTERRUPT_SRC) > 0)
+    {
+        Timer_InterruptFlagClear(HP_PWM_TIMER, PWM1_COMP4_INTERRUPT_SRC);
+        if (s_hpPwmSample.cycle < HP_PWM_TOTAL_CYCLES)
+        {
+            if (!HpPwmAdcRead(HP_ADC_RT_CH, &s_hpPwmSample.low_adc[0]))
+            {
+                s_hpPwmSample.adc_error = true;
+                HpPwmIrqStop();
+                return;
+            }
+            if (!HpPwmAdcRead(HP_ADC_LT_CH, &s_hpPwmSample.low_adc[1]))
+            {
+                s_hpPwmSample.adc_error = true;
+                HpPwmIrqStop();
+                return;
+            }
+        }
+
+        s_hpPwmSample.cycle++;
+        if (s_hpPwmSample.cycle >= HP_PWM_TOTAL_CYCLES)
+        {
+            HpPwmIrqStop();
+        }
+    }
+}
+static void HpPwmStopAndRestore(void)
+{
+    PWM_Disable(HP_PWM_TIMER);
+    Timer_InterrputSrcDisable(HP_PWM_TIMER, PWM1_COMP1_INTERRUPT_SRC);
+    Timer_InterrputSrcDisable(HP_PWM_TIMER, PWM1_COMP4_INTERRUPT_SRC);
+    Timer_InterruptFlagClear(HP_PWM_TIMER, PWM1_COMP1_INTERRUPT_SRC);
+    Timer_InterruptFlagClear(HP_PWM_TIMER, PWM1_COMP4_INTERRUPT_SRC);
+    HpPwmGpioRestoreLow();
+}
+
+static bool HpPwmStart(void)
+{
+    PWM_StructInit pwmParam;
+    uint32_t pwmDivider;
+
+    memset(&pwmParam, 0, sizeof(pwmParam));
+    memset((void *)&s_hpPwmSample, 0, sizeof(s_hpPwmSample));
+
+    pwmDivider = Clock_SysClockFreqGet() / HP_PWM_FREQ_HZ;
+    if ((pwmDivider == 0U) || (pwmDivider > PWM_MAX_FREQ_DIV_VALUE))
+    {
+        return false;
+    }
+
+    pwmParam.CounterMode = PWM_COUNTER_MODE_UP;
+    pwmParam.OutputType = PWM_OUTPUT_SINGLE_1;
+    pwmParam.FreqDiv = pwmDivider;
+    pwmParam.Duty[0] = HP_PWM_HIGH_SAMPLE_PERCENT;
+    pwmParam.Duty[1] = 0U;
+    pwmParam.Duty[2] = HP_PWM_DUTY_PERCENT;
+    pwmParam.Duty[3] = HP_PWM_LOW_SAMPLE_PERCENT;
+    pwmParam.PWMMultiEnable = 1U;
+    pwmParam.DMAReqEnable = PWM_REQ_INTERRUPT_MODE;
+    pwmParam.MasterModeSel = 0U;
+    pwmParam.MasterSlaveSel = 0U;
+    pwmParam.TriggerInSrc = 0U;
+    pwmParam.CcxmAndCccUpdataSel = 0U;
+
+    HpAdEnSet(false);
+    PWM_GpioConfig(HP_PWM_GPIO_SEL, HP_PWM_GPIO_INDEX,
+                   PWM_IO_MODE_OUT, HP_PWM_GPIO_CHANNEL);
+    if (PWM_Config(HP_PWM_TIMER, &pwmParam) != PWM_ERROR_OK)
+    {
+        HpPwmGpioRestoreLow();
+        return false;
+    }
+
+    Timer_InterruptFlagClear(HP_PWM_TIMER, PWM1_COMP1_INTERRUPT_SRC);
+    Timer_InterruptFlagClear(HP_PWM_TIMER, PWM1_COMP4_INTERRUPT_SRC);
+    Timer_InterrputSrcEnable(HP_PWM_TIMER, PWM1_COMP1_INTERRUPT_SRC);
+    Timer_InterrputSrcEnable(HP_PWM_TIMER, PWM1_COMP4_INTERRUPT_SRC);
+    NVIC_EnableIRQ(HP_PWM_IRQ);
+
+    if (PWM_Enable(HP_PWM_TIMER) != PWM_ERROR_OK)
+    {
+        HpPwmStopAndRestore();
+        return false;
+    }
+    return true;
+}
+
+static bool HpPwmSampleBurst(uint16_t *rightAdc, uint16_t *leftAdc,
+                             int16_t *rightMv, int16_t *leftMv)
+{
+    uint8_t waitMs;
+    uint16_t rightHigh;
+    uint16_t rightLow;
+    uint16_t leftHigh;
+    uint16_t leftLow;
+    uint16_t rightDelta;
+    uint16_t leftDelta;
+    bool result = false;
+
+    *rightAdc = 0U;
+    *leftAdc = 0U;
+    *rightMv = 0;
+    *leftMv = 0;
+
+#ifdef FUNC_OS_EN
+    osMutexLock(SarADCMutex);
+#endif
+    AdcChSampleInit(HP_ADC_RT_PORT);
+    AdcChSampleInit(HP_ADC_LT_PORT);
+    osTaskDelay(2);
+    ADC_ModeSet(ADC_CON_SINGLE);
+
+    if (HpPwmStart())
+    {
+        for (waitMs = 0U; waitMs < HP_PWM_TASK_TIMEOUT_MS; waitMs++)
+        {
+            if (s_hpPwmSample.done)
+            {
+                break;
+            }
+            osTaskDelay(1);
+        }
+    }
+
+    HpPwmStopAndRestore();
+    rightHigh = s_hpPwmSample.high_adc[0];
+    rightLow = s_hpPwmSample.low_adc[0];
+    leftHigh = s_hpPwmSample.high_adc[1];
+    leftLow = s_hpPwmSample.low_adc[1];
+
+    if (s_hpPwmSample.done && !s_hpPwmSample.adc_error &&
+        (rightHigh < 0x0FFFU) && (leftHigh < 0x0FFFU) &&
+        (rightHigh > rightLow) && (leftHigh > leftLow))
+    {
+        rightDelta = (uint16_t)(rightHigh - rightLow);
+        leftDelta = (uint16_t)(leftHigh - leftLow);
+        *rightAdc = rightDelta;
+        *leftAdc = leftDelta;
+        *rightMv = (int16_t)(((uint32_t)rightDelta * HP_ADC_REF_MV +
+                             (HP_ADC_FULL_SCALE / 2U)) / HP_ADC_FULL_SCALE);
+        *leftMv = (int16_t)(((uint32_t)leftDelta * HP_ADC_REF_MV +
+                            (HP_ADC_FULL_SCALE / 2U)) / HP_ADC_FULL_SCALE);
+        result = true;
+    }
+
+#ifdef CFG_FUNC_HEADPHONE_DEBUG_LOG_EN
+    APP_DBG("[HP] PWM ADC R=%u/%u L=%u/%u delta=%u/%u mv=%d/%d ok=%u\n",
+            (unsigned int)rightHigh, (unsigned int)rightLow,
+            (unsigned int)leftHigh, (unsigned int)leftLow,
+            (unsigned int)((rightHigh > rightLow) ? (rightHigh - rightLow) : 0U),
+            (unsigned int)((leftHigh > leftLow) ? (leftHigh - leftLow) : 0U),
+            (int)*rightMv, (int)*leftMv, (unsigned int)result);
+#endif
+
+    AdcChSampleDeinit(HP_ADC_RT_PORT);
+    AdcChSampleDeinit(HP_ADC_LT_PORT);
+#ifdef FUNC_OS_EN
+    osMutexUnlock(SarADCMutex);
+#endif
+    return result;
+}
+#endif
+
 //判断阻抗
 static HP_IMPEDANCE_E HpImpJudge(int16_t mv)
 {
@@ -239,9 +503,6 @@ static HP_IMPEDANCE_E HpImpJudge(int16_t mv)
 /* enable / mute DAC0 headphone output + amp EN */
 static void HpDacOutput(bool enable)
 {
-#ifdef CFG_HP_DAC0_BOOT_MUTE_TEST
-    enable = false;
-#endif
     int16_t muteL = enable ? 0 : 1;
     int16_t muteR = enable ? 0 : 1;
     AudioDAC_DigitalMute(DAC0_MODULE, muteL, muteR);
@@ -888,12 +1149,48 @@ void HeadphoneTaskPoll(void)
                 int16_t rMv, lMv, lrDiff;
                 HP_IMPEDANCE_E rImp, lImp;
                 uint8_t retry;
+                bool sampleOk = false;
+
+                rAdc = 0U;
+                lAdc = 0U;
+                rMv = 0;
+                lMv = 0;
+                rImp = HP_IMP_UNKNOWN;
+                lImp = HP_IMP_UNKNOWN;
 
                 /* 等待稳定 */
                 osTaskDelay(HP_SETTLE_MS);
 
                 for (retry = 0; retry < 2; retry++)
                 {
+#ifdef CFG_HP_IMPEDANCE_PWM_SYNC_EN
+                    sampleOk = HpPwmSampleBurst(&rAdc, &lAdc, &rMv, &lMv);
+                    if (!sampleOk)
+                    {
+#ifdef CFG_FUNC_HEADPHONE_DEBUG_LOG_EN
+                        APP_DBG("[HP] PWM ADC invalid, retry=%u\n", (unsigned int)retry);
+#endif
+                        if (retry == 0U)
+                        {
+                            osTaskDelay(10);
+                            continue;
+                        }
+                        break;
+                    }
+
+                    rImp = HpImpJudge(rMv);
+                    lImp = HpImpJudge(lMv);
+                    lrDiff = (lMv > rMv) ? (int16_t)(lMv - rMv) : (int16_t)(rMv - lMv);
+                    if ((retry == 0U) &&
+                        ((lrDiff > HP_IMP_ASYM_MV) || (rImp != lImp)))
+                    {
+#ifdef CFG_FUNC_HEADPHONE_DEBUG_LOG_EN
+                        APP_DBG("[HP] PWM L/R mismatch %dmV, resample\n", (int)lrDiff);
+#endif
+                        osTaskDelay(10);
+                        continue;
+                    }
+#else
                     HpAdEnSet(true);           /* reference on, only during sample */
                     osTaskDelay(HP_REF_SETTLE_MS);  /* let 3.3V ref stabilize */
                     rAdc = HpAdcSampleNormalized(HP_ADC_RT_CH, HP_ADC_RT_PORT);
@@ -914,11 +1211,16 @@ void HeadphoneTaskPoll(void)
                         osTaskDelay(HP_SETTLE_MS);   /* wait a bit before retry */
                         continue;
                     }
+                    sampleOk = true;
+#endif
                     break;
                 }
 
-                rImp = HpImpJudge(rMv);
-                lImp = HpImpJudge(lMv);
+                if (sampleOk)
+                {
+                    rImp = HpImpJudge(rMv);
+                    lImp = HpImpJudge(lMv);
+                }
 
                 s_imp.right_adc = rAdc;
                 s_imp.left_adc  = lAdc;
